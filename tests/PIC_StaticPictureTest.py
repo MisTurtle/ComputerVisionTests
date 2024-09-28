@@ -13,7 +13,7 @@ feed.add_filter(lambda og: cv2.cvtColor(og, cv2.COLOR_RGB2GRAY))
 
 # Binarize using histogram-computed threshold
 def binarize(gray: np.ndarray):
-	hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+	# hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
 	# plt.plot(hist)
 	# plt.xlim([0, 256])
 	# plt.show()

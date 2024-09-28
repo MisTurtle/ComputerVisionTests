@@ -42,7 +42,16 @@ class Feed(ABC):
 		"""
 		pass
 
-	def add_filter(self, fn: Callable[[np.ndarray], np.ndarray]):
+	def get_intermediate(self, i: int) -> Union[np.ndarray, None]:
+		if len(self._intermediate_frames) == 0:
+			self.error("Tried to fetch intermediate frame from empty feed")
+			return None
+		return self._intermediate_frames[i % len(self._intermediate_frames)]
+
+	def extract_frames(self):
+		return self._intermediate_frames.copy()
+
+	def add_filter(self, fn: Callable[[np.ndarray], Union[np.ndarray, cv2.UMat]]):
 		self._filters.append(fn)
 
 	def get_filter_frame_name(self, f_id: int):
