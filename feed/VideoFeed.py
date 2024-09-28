@@ -19,16 +19,15 @@ class VideoFeed(Feed):
 	def process_next_frame(self):
 		if not self._enabled:
 			return
-		self._src = self._fetch_frame()
-		self._result = self._src
-		if self._src is None:
+		self._intermediate_frames = [self._fetch_frame()]
+		if self._intermediate_frames[0] is None:
 			self.error("No frame could be extracted from the feed")
 			return
 		if self._show_source:
 			self.show_src()
 		self._apply_filters()
 		if self._show_result:
-			self.show()
+			self.show_result()
 
 	def _fetch_frame(self) -> Union[np.ndarray, None]:
 		if not self._enabled:

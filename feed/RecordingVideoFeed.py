@@ -24,8 +24,8 @@ class RecordingVideoFeed(VideoFeed):
 
 	def process_next_frame(self):
 		super().process_next_frame()
-		if self._result is not None:
-			self._out_stream.write(self._result)
+		if len(self._intermediate_frames) != 0:
+			self._out_stream.write(self._intermediate_frames[-1])
 
 	def end(self):
 		super().end()

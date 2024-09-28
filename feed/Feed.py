@@ -12,9 +12,8 @@ class Feed(ABC):
 	def __init__(self, name: str, **kwargs):
 		assert name not in Feed.reserved_names
 		self._name = name
-		self._src = None
-		self._result = None
 		self._filters = []
+		self._intermediate_frames = []
 		self._show_source = kwargs.get('show_src', True)  # Should the frame be displayed before being filtered
 		self._show_result = kwargs.get('show_result', True)  # Should the frame be displayed after being filtered
 		# Should filter steps be displayed individually
@@ -50,26 +49,27 @@ class Feed(ABC):
 		return self._name + "_step" + str(f_id)
 
 	def _apply_filters(self):
-		if self._result is None:
+		if len(self._intermediate_frames) != 1:
 			return
 		for i, f in enumerate(self._filters):
-			self._result = f(self._result)
+			self._intermediate_frames.append(f(self._intermediate_frames[-1].copy()))
 			if i == len(self._filters) - 1:
 				break
 			if self._show_steps is True or isinstance(self._show_steps, list) and i in self._show_steps:
-				cv2.imshow(self.get_filter_frame_name(i), self._result)
+				self.show(i + 1)
+
+	def show(self, intermediate_frame: int):
+		if len(self._intermediate_frames) == 0:
+			self.error("Tried to display a frame from empty feed")
+			return
+		intermediate_frame %= len(self._intermediate_frames)
+		cv2.imshow(self._name + "_step" + str(intermediate_frame), self._intermediate_frames[intermediate_frame])
 
 	def show_src(self):
-		if self._src is None:
-			self.error("Tried to display ImageFeed with None src")
-			return
-		cv2.imshow(self._name + "_src", self._src)
+		self.show(0)
 
-	def show(self):
-		if self._result is None:
-			self.error("Tried to display ImageFeed with None result")
-			return
-		cv2.imshow(self._name, self._result)
+	def show_result(self):
+		self.show(-1)
 
 	@abstractmethod
 	def end(self):

@@ -8,9 +8,9 @@ from feed import Feed
 
 class PictureFeed(Feed):
 
-	def __init__(self, name: str, image_src: str, img_mode: int, **kwargs):
+	def __init__(self, name: str, img_src: str, img_mode: int, **kwargs):
 		super().__init__(name, **kwargs)
-		self._src = cv2.imread(image_src, img_mode)
+		self.set_img_src(img_src, img_mode)
 		self._dirty = True
 
 	def add_filter(self, fn: Callable[[np.ndarray], np.ndarray]):
@@ -18,18 +18,20 @@ class PictureFeed(Feed):
 		self._dirty = True
 
 	def set_img_src(self, image_src: str, img_mode: int):
-		self._src = cv2.imread(image_src, img_mode)
+		self._intermediate_frames = [cv2.imread(image_src, img_mode)]
 		self._dirty = True
 
 	def process_next_frame(self):
 		if not self._dirty:
 			return
+		self._intermediate_frames = [self._intermediate_frames[0]]
+
 		if self._show_source:
 			self.show_src()
-		self._result = self._src
 		self._apply_filters()
 		if self._show_result:
-			self.show()
+			self.show_result()
+
 		self._dirty = False
 
 	def _fetch_frame(self) -> Union[np.ndarray, None]:
