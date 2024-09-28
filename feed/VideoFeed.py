@@ -3,10 +3,10 @@ from typing import Union
 import cv2
 import numpy as np
 
-from feed.ImageFeed import ImageFeed
+from feed.Feed import Feed
 
 
-class VideoFeed(ImageFeed):
+class VideoFeed(Feed):
 
 	def __init__(self, name: str, in_stream: Union[str, int], **kwargs):
 		super().__init__(name, **kwargs)
@@ -23,6 +23,7 @@ class VideoFeed(ImageFeed):
 		self._result = self._src
 		if self._src is None:
 			self.error("No frame could be extracted from the feed")
+			return
 		if self._show_source:
 			self.show_src()
 		self._apply_filters()

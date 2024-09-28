@@ -5,12 +5,12 @@ import cv2
 import numpy as np
 
 
-class ImageFeed(ABC):
+class Feed(ABC):
 
 	reserved_names = []
 
 	def __init__(self, name: str, **kwargs):
-		assert name not in ImageFeed.reserved_names
+		assert name not in Feed.reserved_names
 		self._name = name
 		self._src = None
 		self._result = None
@@ -20,7 +20,7 @@ class ImageFeed(ABC):
 		# Should filter steps be displayed individually
 		# True => Display all steps, list[int] => Display steps with a given id, False => display nothing
 		self._show_steps = kwargs.get('show_steps', False)
-		ImageFeed.reserved_names.append(name)
+		Feed.reserved_names.append(name)
 
 	def error(self, msg: str):
 		print("\033[91m[ERR] " + self._name + ": " + msg + "\033[0m")
