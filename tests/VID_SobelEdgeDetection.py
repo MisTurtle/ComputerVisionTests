@@ -5,7 +5,7 @@ matplotlib.use('TkAgg')
 
 from feed import VideoFeed
 
-feed = VideoFeed("static_pic_test", 0, show_result=True, show_src=True, show_steps=True)
+feed = VideoFeed("sobel_edge_detection", 0, show_result=True, show_src=True, show_steps=True)
 feed.add_filter(lambda coul: cv2.cvtColor(coul, cv2.COLOR_BGR2GRAY))
 
 
