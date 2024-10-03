@@ -13,7 +13,7 @@ class PictureFeed(Feed):
 		self.set_img_src(img_src, img_mode)
 		self._dirty = True
 
-	def add_filter(self, fn: Callable[[np.ndarray], np.ndarray]):
+	def add_filter(self, fn: Callable[[np.ndarray], Union[np.ndarray, cv2.UMat]]):
 		super().add_filter(fn)
 		self._dirty = True
 
