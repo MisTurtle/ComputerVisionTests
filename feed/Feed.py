@@ -54,6 +54,9 @@ class Feed(ABC):
 	def add_filter(self, fn: Callable[[np.ndarray], Union[np.ndarray, cv2.UMat]]):
 		self._filters.append(fn)
 
+	def add_action(self, fn: Callable[[np.ndarray], None]):
+		self._filters.append(fn)
+
 	def get_filter_frame_name(self, f_id: int):
 		return self._name + "_step" + str(f_id)
 
@@ -61,7 +64,10 @@ class Feed(ABC):
 		if len(self._intermediate_frames) != 1:
 			return
 		for i, f in enumerate(self._filters):
-			self._intermediate_frames.append(f(self._intermediate_frames[-1].copy()))
+			filtered = f(self._intermediate_frames[-1].copy())
+			if filtered is None:  # Was an action and not a filter
+				continue
+			self._intermediate_frames.append(filtered)
 			if i == len(self._filters) - 1:
 				break
 			if self._show_steps is True or isinstance(self._show_steps, list) and i in self._show_steps:

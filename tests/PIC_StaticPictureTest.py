@@ -6,7 +6,7 @@ matplotlib.use('TkAgg')
 from feed import PictureFeed
 from matplotlib import pyplot as plt
 
-feed = PictureFeed("static_pic_test", "input/IN_PLATE.jpeg", cv2.IMREAD_COLOR, show_result=True, show_src=True, show_steps=True)
+feed = PictureFeed("static_pic_test", "../input/IN_PLATE.jpeg", cv2.IMREAD_COLOR, show_result=True, show_src=True, show_steps=True)
 # Color 2 grayscale
 feed.add_filter(lambda og: cv2.cvtColor(og, cv2.COLOR_RGB2GRAY))
 

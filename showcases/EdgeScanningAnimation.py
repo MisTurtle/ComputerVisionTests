@@ -42,7 +42,6 @@ def build_mask(shape, t: float) -> cv2.UMat | np.ndarray:
 	f1_values, f2_values = f1(x), f2(x)
 	# Apply the mask: set values in the mask to 255 where the condition is True
 	mask[(f1_values < y) & (y < f2_values)] = 255
-
 	return mask
 
 
@@ -56,7 +55,7 @@ def draw_edges(sobel: np.ndarray, thresh: int, color: tuple[int, int, int]):
 	return src
 
 
-feed = VideoFeed("sobel_edge_detection", 0, show_result=True, show_src=False, show_steps=False)
+feed = VideoFeed("sobel_edge_scanning_animation", 0, show_result=True, show_src=False, show_steps=False)
 
 feed.add_filter(lambda coul: cv2.cvtColor(coul, cv2.COLOR_BGR2GRAY))
 feed.add_filter(lambda gray: cv2.blur(gray, (3, 3)))
